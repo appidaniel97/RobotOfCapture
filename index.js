@@ -32,14 +32,12 @@ async function robot(){
 
     console.log(`Data da avaliação:${dateReviewd}`);
     console.log(`Titulo da avaliação:${titleReviewd}`);
+   
+    const text = await page.evaluate(() => Array.from(document.querySelectorAll('span.noQuotes'), element => element.textContent));
+    console.log(text);
+    console.log(text[5]);
+
     
-    //const arrayTitle = await page.evaluate(() => {
-    //    Array.from(document.querySelectorAll('.noQuotes')).map(function(element, index, arrayBase){
-    //        const array = element.textContent;
-    //         return array
-    //    })
-    //});
-    //console.log(array)
 }
 
 robot();
