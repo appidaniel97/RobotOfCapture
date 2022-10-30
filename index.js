@@ -1,6 +1,13 @@
 //Commands for capture date in sites
 //document.querySelector('.ratingDate').innerHTML - Date of reviewed
 //document.querySelector('.noQuotes').innerHTML - Title about review
+//Array title
+    //Array.from(document.querySelectorAll('.noQuotes')).map(function(element, index, arrayBase){
+    //     //console.log(element.textContent);
+    //     const arrayTitle = element.textContent;
+    //     return arrayTitle
+    //})
+
 //document.querySelector('.partial_entry').innerHTML - Comment about review
 
 console.log("Bem vindo ao Roboto!");
@@ -23,8 +30,16 @@ async function robot(){
         return document.querySelector('.noQuotes').innerHTML
     })
 
-    console.log(`Data da avaliação:${dateReviewd}`)
-    console.log(`Titulo da avaliação:${titleReviewd}`)
+    console.log(`Data da avaliação:${dateReviewd}`);
+    console.log(`Titulo da avaliação:${titleReviewd}`);
+    
+    //const arrayTitle = await page.evaluate(() => {
+    //    Array.from(document.querySelectorAll('.noQuotes')).map(function(element, index, arrayBase){
+    //        const array = element.textContent;
+    //         return array
+    //    })
+    //});
+    //console.log(array)
 }
 
 robot();
