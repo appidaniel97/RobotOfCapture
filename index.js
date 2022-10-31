@@ -20,7 +20,7 @@ async function robot(){
     const page = await browser.newPage();
     const vezpaTijucaUrl = `https://www.tripadvisor.com/Restaurant_Review-g303506-d9969088-Reviews-Vezpa_Pizzas_Tijuca-Rio_de_Janeiro_State_of_Rio_de_Janeiro.html`
     await page.goto(vezpaTijucaUrl);
-    await page.screenshot({path: 'example.png'});
+    //await page.screenshot({path: 'example.png'});
     //await browser.close();
 
     const dateReviewd = await page.evaluate(() => {
@@ -33,10 +33,12 @@ async function robot(){
     console.log(`Data da avaliação:${dateReviewd}`);
     console.log(`Titulo da avaliação:${titleReviewd}`);
    
-    const text = await page.evaluate(() => Array.from(document.querySelectorAll('span.noQuotes'), element => element.textContent));
-    console.log(text);
-    console.log(text[5]);
+    const arrayTitle = await page.evaluate(() => Array.from(document.querySelectorAll('.noQuotes'), element => element.textContent));
+    console.log(arrayTitle);
+    console.log(arrayTitle[5]);
 
+    const arrayDate = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
+    console.log(arrayDate);
     
 }
 
