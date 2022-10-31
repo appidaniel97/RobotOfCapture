@@ -10,6 +10,10 @@
 
 //document.querySelector('.partial_entry').innerHTML - Comment about review
 
+let dateDb = "";
+let titleDb = "";
+let commentDb = "";
+
 console.log("Bem vindo ao Roboto!");
 
 const puppeteer = require('puppeteer');
@@ -23,23 +27,47 @@ async function robot(){
     //await page.screenshot({path: 'example.png'});
     //await browser.close();
 
-    const dateReviewd = await page.evaluate(() => {
-        return document.querySelector('.ratingDate').innerHTML
-    })
-    const titleReviewd = await page.evaluate(() => {
-        return document.querySelector('.noQuotes').innerHTML
-    })
+    //const dateReviewd = await page.evaluate(() => {
+    //    return document.querySelector('.ratingDate').innerHTML
+    //})
+    //const titleReviewd = await page.evaluate(() => {
+    //    return document.querySelector('.noQuotes').innerHTML
+    //})
 
-    console.log(`Data da avaliação:${dateReviewd}`);
-    console.log(`Titulo da avaliação:${titleReviewd}`);
-   
-    const arrayTitle = await page.evaluate(() => Array.from(document.querySelectorAll('.noQuotes'), element => element.textContent));
-    console.log(arrayTitle);
-    console.log(arrayTitle[5]);
-
-    const arrayDate = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
-    console.log(arrayDate);
+    //console.log(`Data da avaliação:${dateReviewd}`);
+    //console.log(`Titulo da avaliação:${titleReviewd}`);
     
+    const arrayDate = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
+    //console.log(arrayDate);
+
+    const arrayTitle = await page.evaluate(() => Array.from(document.querySelectorAll('.noQuotes'), element => element.textContent));
+    //console.log(arrayTitle);
+    //console.log(arrayTitle[5]);
+
+    const arrayComment = await page.evaluate(() => Array.from(document.querySelectorAll('.partial_entry'), element => element.textContent));
+    
+    for (let index = 0; index < arrayDate.length; index++) {
+        const element = arrayDate[index];
+        dateDb = element;
+        //console.log(element, "elementos")
+        console.log(dateDb, "DATAS")
+    }   
+
+    for (let index = 0; index < arrayTitle.length; index++) {
+        const element = arrayTitle[index];
+        titleDb = element;
+        //console.log(element, "elementos")
+        console.log(titleDb, "TITULOS")
+    }
+
+    for (let index = 0; index < arrayComment.length; index++) {
+        const element = arrayComment[index];
+        commentDb = element;
+        //console.log(element, "elementos")
+        console.log(commentDb, "COMENTARIOS")
+    }
+
+
 }
 
 robot();

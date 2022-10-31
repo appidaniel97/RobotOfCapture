@@ -10,3 +10,24 @@ sequelize.authenticate().then(() =>{
 }).catch((error) => {
     console.error('Unable to connect to the database:', error)
 })
+
+//Module - Create Table Review
+const review = sequelize.define('reviews', {
+    dateReview: {
+        type: Sequelize.STRING
+    },
+    titleReview: {
+        type: Sequelize.STRING
+    },
+    commentReview: {
+        type: Sequelize.TEXT
+    }
+})
+
+//review.sync({force: true})
+
+review.create({
+    dateReview: "Received variable",
+    titleReview: "Received variable",
+    commentReview: "Received variable",
+})
