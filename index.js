@@ -1,74 +1,80 @@
-//Commands for capture date in sites
-//document.querySelector('.ratingDate').innerHTML - Date of reviewed
-//document.querySelector('.noQuotes').innerHTML - Title about review
-//Array title
-    //Array.from(document.querySelectorAll('.noQuotes')).map(function(element, index, arrayBase){
-    //     //console.log(element.textContent);
-    //     const arrayTitle = element.textContent;
-    //     return arrayTitle
-    //})
-
-//document.querySelector('.partial_entry').innerHTML - Comment about review
-
-let dateDb = "";
-let titleDb = "";
-let commentDb = "";
-
-console.log("Bem vindo ao Roboto!");
-
 const puppeteer = require('puppeteer');
 
+//Db Orm
+const { Sequelize } = require('sequelize');
+
+const sequelize = new Sequelize('db_arcca', 'postgres', 'postgres', {
+    host: 'arccadb.cvw8aysdigsk.us-east-1.rds.amazonaws.com',
+    dialect: 'postgres'
+});
+
+sequelize.authenticate().then(() =>{
+    console.log('Connection has been established successfully.')
+}).catch((error) => {
+    console.error('Unable to connect to the database:', error)
+})
+
+//Module - Create Table Review
+const review = sequelize.define('reviews', {
+    dateReview: {
+        type: Sequelize.STRING
+    },
+    titleReview: {
+        type: Sequelize.STRING
+    },
+    commentReview: {
+        type: Sequelize.TEXT
+    }
+})
+
+//review.sync({force: true})
 
 async function robot(){
     const browser = await puppeteer.launch({ headless: false});
     const page = await browser.newPage();
     const vezpaTijucaUrl = `https://www.tripadvisor.com/Restaurant_Review-g303506-d9969088-Reviews-Vezpa_Pizzas_Tijuca-Rio_de_Janeiro_State_of_Rio_de_Janeiro.html`
     await page.goto(vezpaTijucaUrl);
-    //await page.screenshot({path: 'example.png'});
-    //await browser.close();
 
-    //const dateReviewd = await page.evaluate(() => {
-    //    return document.querySelector('.ratingDate').innerHTML
-    //})
-    //const titleReviewd = await page.evaluate(() => {
-    //    return document.querySelector('.noQuotes').innerHTML
-    //})
 
-    //console.log(`Data da avaliação:${dateReviewd}`);
-    //console.log(`Titulo da avaliação:${titleReviewd}`);
+    await page.click('span.taLnk.ulBlueLinks');
+    console.log('PASSOU DO CLICK')
     
-    const arrayDate = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
-    //console.log(arrayDate);
-
+    //CAPTURA OS DADOS DA PRIMEIRA PAGINA 
+    let arrayDate = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
     const arrayTitle = await page.evaluate(() => Array.from(document.querySelectorAll('.noQuotes'), element => element.textContent));
-    //console.log(arrayTitle);
-    //console.log(arrayTitle[5]);
+    const arrayComment = await page.evaluate(() => Array.from(document.querySelectorAll('.partial_entry'), element => element.textContent)); 
+    const arrayName = await page.evaluate(() => Array.from(document.querySelectorAll('.info_text.pointer_cursor'), element => element.textContent));
 
-    const arrayComment = await page.evaluate(() => Array.from(document.querySelectorAll('.partial_entry'), element => element.textContent));
-    
-    for (let index = 0; index < arrayDate.length; index++) {
-        const element = arrayDate[index];
-        dateDb = element;
-        //console.log(element, "elementos")
-        console.log(dateDb, "DATAS")
-    }   
+    //await Promise.all([
+    //    page.waitForNavigation(), 
+    //    page.click('a.nav.next.ui_button.primary')
+    //]);
+    //console.log(arrayDate,"ANTES DE PASSAR PAGINA")
+    //VOU PARA SEGUNDA PAGINA
+   // await page.click('a.nav.next.ui_button.primary'); //passar para proxima pagina
+    //const [response] = await Promise.all([
+    //    page.waitForNavigation(), // The promise resolves after navigation has finished
+    //    page.click('a.nav.next.ui_button.primary'), // Clicking the link will indirectly cause a navigation
+    //  ]);
 
-    for (let index = 0; index < arrayTitle.length; index++) {
-        const element = arrayTitle[index];
-        titleDb = element;
-        //console.log(element, "elementos")
-        console.log(titleDb, "TITULOS")
-    }
+    //CAPTURAR DADOS DA SEGUNDA PAGINA
+    await page.goto('https://www.tripadvisor.com/Restaurant_Review-g303506-d9969088-Reviews-or15-Vezpa_Pizzas_Tijuca-Rio_de_Janeiro_State_of_Rio_de_Janeiro.html');
+    const arrayDate2 = await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
+    //console.log(arrayDate2,"SEGUNDO ARRAY");
+    arrayDate += await page.evaluate(() => Array.from(document.querySelectorAll('.ratingDate'), element => element.textContent));
+    console.log(arrayDate,'22222222222222222222')
 
-    for (let index = 0; index < arrayComment.length; index++) {
-        const element = arrayComment[index];
-        commentDb = element;
-        //console.log(element, "elementos")
-        console.log(commentDb, "COMENTARIOS")
-    }
+    arrayDate.forEach((dateDb, index) => {
+        const titleDb = arrayTitle[index];
+        const commentDb = arrayComment[index];
+        //console.log(dateDb,titleDb, commentDb);
 
-
+        //review.create({
+        //    dateReview: dateDb,
+        //    titleReview: titleDb,
+        //    commentReview: commentDb
+        //});
+    })
+    //await browser.close();
 }
-
 robot();
-    
