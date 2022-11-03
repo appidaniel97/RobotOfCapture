@@ -12,7 +12,19 @@ sequelize.authenticate().then(() =>{
 })
 
 //Module - Create Table Review
-const review = sequelize.define('reviews', {
+//const review = sequelize.define('reviews', {
+//    dateReview: {
+//        type: Sequelize.STRING
+//    },
+//    titleReview: {
+//        type: Sequelize.STRING
+//    },
+//    commentReview: {
+//        type: Sequelize.TEXT
+//    }
+//});
+
+const review2 = sequelize.define('reviews2s', {
     dateReview: {
         type: Sequelize.STRING
     },
@@ -22,11 +34,17 @@ const review = sequelize.define('reviews', {
     commentReview: {
         type: Sequelize.TEXT
     }
-})
+});
 
 //review.sync({force: true})
 
-review.create({
+//review.create({
+//    dateReview: "Received variable",
+//    titleReview: "Received variable",
+//    commentReview: "Received variable",
+//})
+
+review2.create({
     dateReview: "Received variable",
     titleReview: "Received variable",
     commentReview: "Received variable",
